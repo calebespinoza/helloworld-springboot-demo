@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-springboot-deployment
+  labels:
+    app: hello-world-demo
+    type: spring-boot
+spec:
+  selector:
+    matchLabels:
+      app: hello-world-demo
+      type: spring-boot
+  template:
+    metadata:
+      name: demo-springboot-pod
+      labels:
+        app: hello-world-demo
+        type: spring-boot
+    spec:
+      containers:
+        - name: demo-springboot
+          image: calebespinoza/helloworld-springboot-demo:latest
+          ports:
+            - containerPort: 8787
+              hostPort: 8787
+  replicas: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-springboot-svc
+  labels:
+    app: hello-world-demo
+    type: springboot
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8787
+      targetPort: 8787
+      nodePort: 30005
+  selector:
+    app: hello-world-demo
+    type: spring-boot
