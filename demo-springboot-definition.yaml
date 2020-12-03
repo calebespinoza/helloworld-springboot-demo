@@ -54,6 +54,6 @@ spec:
     - host: helloworld-springboot.com
       http:
         paths:
-          backend:
-            serviceName: demo-springboot-svc
-            servicePort: 8787
+          - backend:
+              serviceName: demo-springboot-svc
+              servicePort: 8787
