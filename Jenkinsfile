@@ -31,6 +31,7 @@ pipeline {
 
         stage ("Build Image") {
             steps {
+                echo "Build an OCI image"
                 //sh "./gradlew bootBuildImage --imageName=$IMAGE_NAME"
             }
         }
