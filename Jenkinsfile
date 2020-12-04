@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-        IMAGE_NAME = "calebespinoza/image:latest"
+        DOCKER_REGISTRY = "calebespinoza"
+        IMAGE_NAME = "$DOCKER_REGISTRY/helloworld-springboot-demo"
     }
     stages {
         stage ('Compile') {
@@ -32,7 +33,14 @@ pipeline {
         stage ("Build Image") {
             steps {
                 echo "Build an OCI image"
-                //sh "./gradlew bootBuildImage --imageName=$IMAGE_NAME"
+                sh "./gradlew bootBuildImage --imageName=$IMAGE_NAME:latest && docker images"
+            }
+        }
+
+        stage ("Verify Container") {
+            steps {
+                echo "docker run -d -p 8787:8787 --name demo-springboot $IMAGE_NAME:latest"
+                echo "curl <http://localhost:8787/hello/Sitehands/Team>"
             }
         }
     }
