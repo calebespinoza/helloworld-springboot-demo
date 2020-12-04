@@ -43,5 +43,11 @@ pipeline {
                 echo "curl <http://localhost:8787/hello/Sitehands/Team>"
             }
         }
+
+        stage ("Upload Image") {
+            steps {
+                echo "docker push $IMAGE_NAME"
+            }
+        }
     }
 }
