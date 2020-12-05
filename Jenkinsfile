@@ -33,6 +33,7 @@ pipeline {
         stage ("Build Image") {
             steps {
                 echo "Build an OCI image"
+                sh "chmod 666 /var/run/docker.sock"
                 sh "./gradlew bootBuildImage --imageName=$IMAGE_NAME:latest && docker images"
             }
         }
@@ -40,7 +41,7 @@ pipeline {
         stage ("Verify Container") {
             steps {
                 echo "docker run -d -p 8787:8787 --name demo-springboot $IMAGE_NAME:latest"
-                echo "curl <http://localhost:8787/hello/Sitehands/Team>"
+                echo "curl -I http://localhost:8787/hello/Sitehands/Team --silent | grep 200"
             }
         }
 
