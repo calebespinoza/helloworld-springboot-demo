@@ -33,8 +33,8 @@ pipeline {
         stage ("Build Image") {
             steps {
                 echo "Build an OCI image"
-                sh "sudo chmod 666 /var/run/docker.sock"
-                sh "./gradlew bootBuildImage --imageName=$IMAGE_NAME:latest && docker images"
+                sh "docker version && docker images"
+                //sh "./gradlew bootBuildImage --imageName=$IMAGE_NAME:latest && docker images"
             }
         }
 
