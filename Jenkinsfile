@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent "linux-agent-01"//any
     environment {
         DOCKER_REGISTRY = "calebespinoza"
         IMAGE_NAME = "$DOCKER_REGISTRY/helloworld-springboot-demo"
