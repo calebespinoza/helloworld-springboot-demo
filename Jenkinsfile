@@ -42,6 +42,14 @@ pipeline {
         stage ("Verify Container") {
             steps {
                 script {
+                    sh '''
+                        if [ "$(docker ps -aq -f name=${CONTAINER_NAME})" ]; then
+                            if [ ! "$(docker ps -aq -f status=exited -f name=${CONTAINER_NAME})" ]; then
+                                docker stop ${CONTAINER_NAME}
+                            fi
+                            docker rm ${CONTAINER_NAME}
+                        fi
+                    '''
                     sh "docker run -d -p 8787:8787 --name $CONTAINER_NAME $IMAGE_NAME:latest"
                     sleep 30
                     httpStatus = sh ( returnStdout: true, script: 'curl -I http://localhost:8787/hello/Sitehands/Team --silent | grep 200' ).trim()
