@@ -1,8 +1,10 @@
+def httpStatus = ""
 pipeline {
     agent { label "linux-agent-01" }//any
     environment {
         DOCKER_REGISTRY = "calebespinoza"
         IMAGE_NAME = "$DOCKER_REGISTRY/helloworld-springboot-demo"
+        CONTAINER_NAME = "demo-springboot"
     }
     stages {
         stage ('Compile') {
@@ -40,10 +42,9 @@ pipeline {
         stage ("Verify Container") {
             steps {
                 script {
-                    sh "docker run -d -p 8787:8787 --name demo-springboot $IMAGE_NAME:latest"
+                    sh "docker run -d -p 8787:8787 --name $CONTAINER_NAME $IMAGE_NAME:latest"
                     sleep 30
-                    echo "curl -I http://localhost:8787/hello/Sitehands/Team --silent | grep 200"
-                    def httpStatus = sh ( returnStdout: true, script: 'curl -I http://localhost:8787/hello/Sitehands/Team --silent | grep 200' ).trim()
+                    httpStatus = sh ( returnStdout: true, script: 'curl -I http://localhost:8787/hello/Sitehands/Team --silent | grep 200' ).trim()
                     echo "HTTP STATUS: $httpStatus"
                 }
             }
@@ -51,7 +52,13 @@ pipeline {
 
         stage ("Upload Image") {
             steps {
-                echo "docker push $IMAGE_NAME"
+                script {
+                    if (httpStatus == "HTTP/1.1 200") {
+                        echo "docker push $IMAGE_NAME"
+                    }
+
+                    sh "docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME && docker rmi $IMAGE_NAME:latest"
+                }
             }
         }
     }
