@@ -2,7 +2,7 @@ pipeline {
     agent { label "linux-agent-01" }//any
     environment {
         DOCKER_REGISTRY = "calebespinoza"
-        IMAGE_NAME = "$DOCKEsR_REGISTRY/helloworld-springboot-demo"
+        IMAGE_NAME = "$DOCKER_REGISTRY/helloworld-springboot-demo"
     }
     stages {
         stage ('Compile') {
@@ -39,8 +39,12 @@ pipeline {
 
         stage ("Verify Container") {
             steps {
-                echo "docker run -d -p 8787:8787 --name demo-springboot $IMAGE_NAME:latest"
-                echo "curl -I http://localhost:8787/hello/Sitehands/Team --silent | grep 200"
+                script {
+                    sh "docker run -d -p 8787:8787 --name demo-springboot $IMAGE_NAME:latest"
+                    echo "curl -I http://localhost:8787/hello/Sitehands/Team --silent | grep 200"
+                    def httpStatus = sh ( returnStdout: true, script: 'curl -I http://localhost:8787/hello/Sitehands/Team --silent | grep 200' ).trim()
+                    echo "HTTP STATUS: $httpStatus"
+                }
             }
         }
 
