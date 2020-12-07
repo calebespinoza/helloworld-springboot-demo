@@ -41,6 +41,7 @@ pipeline {
             steps {
                 script {
                     sh "docker run -d -p 8787:8787 --name demo-springboot $IMAGE_NAME:latest"
+                    sleep 30s
                     echo "curl -I http://localhost:8787/hello/Sitehands/Team --silent | grep 200"
                     def httpStatus = sh ( returnStdout: true, script: 'curl -I http://localhost:8787/hello/Sitehands/Team --silent | grep 200' ).trim()
                     echo "HTTP STATUS: $httpStatus"
