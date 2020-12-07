@@ -1,8 +1,8 @@
 pipeline {
-    agent "linux-agent-01"//any
+    agent { "linux-agent-01" }//any
     environment {
         DOCKER_REGISTRY = "calebespinoza"
-        IMAGE_NAME = "$DOCKER_REGISTRY/helloworld-springboot-demo"
+        IMAGE_NAME = "$DOCKEsR_REGISTRY/helloworld-springboot-demo"
     }
     stages {
         stage ('Compile') {
