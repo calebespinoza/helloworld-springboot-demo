@@ -5,7 +5,7 @@ pipeline {
         DOCKER_REGISTRY = "192.168.90.2:9001"
         IMAGE_NAME = "$DOCKER_REGISTRY/helloworld-springboot-demo"
         CONTAINER_NAME = "demo-springboot"
-        REGISTRY_CREDENTIALS = credentials ("docker-private-registry")
+        REGISTRY_CREDENTIALS = credentials ('docker-private-registry')
     }
     stages {
         stage ('Compile') {
@@ -64,7 +64,7 @@ pipeline {
                 script {
                     if (httpStatus == "HTTP/1.1 200") {
                         //echo "docker push $IMAGE_NAME"
-                        sh "docker login $DOCKER_REGISTRY -u $REGISTRY_CREDENTIALS_USR --password-stdin $REGISTRY_CREDENTIALS_PSW"
+                        sh 'docker login $DOCKER_REGISTRY -u $REGISTRY_CREDENTIALS_USR --password-stdin $REGISTRY_CREDENTIALS_PSW'
                         sh "docker push IMAGE_NAME:latest"
                     }
                 }
