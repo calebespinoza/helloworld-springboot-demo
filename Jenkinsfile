@@ -64,15 +64,15 @@ pipeline {
                 script {
                     if (httpStatus == "HTTP/1.1 200") {
                         //echo "docker push $IMAGE_NAME"
-                        sh "docker login -u $REGISTRY_CREDENTIALS_USR --password-stdin $REGISTRY_CREDENTIALS_PSW $DOCKER_REGISTRY"
+                        sh "docker login $DOCKER_REGISTRY -u $REGISTRY_CREDENTIALS_USR --password-stdin $REGISTRY_CREDENTIALS_PSW"
                         sh "docker push IMAGE_NAME:latest"
                     }
-                    sh "docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME && docker rmi $IMAGE_NAME:latest"
                 }
             }
             post {
                 failure {
                     echo 'Something went wrong while uploading container image'
+                    sh "docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME && docker rmi $IMAGE_NAME:latest"
                 }
             }
         }
