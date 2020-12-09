@@ -65,7 +65,7 @@ pipeline {
                     if (httpStatus == "HTTP/1.1 200") {
                         //echo "docker push $IMAGE_NAME"
                         sh 'docker login --username $REGISTRY_CREDENTIALS_USR --password $REGISTRY_CREDENTIALS_PSW $DOCKER_REGISTRY'
-                        sh "docker push IMAGE_NAME:latest"
+                        sh "docker push $IMAGE_NAME:latest"
                     }
                 }
             }
