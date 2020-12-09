@@ -71,6 +71,9 @@ pipeline {
                 }
             }
             post {
+                failure {
+                    echo 'Something went wrong while uploading container image'
+                }
             }
         }
     }
